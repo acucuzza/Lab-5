@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import exceptions.DeckException;
 import netgame.common.Hub;
+import poker.app.view.PokerTableController;
+import poker.app.view.RootLayoutController;
 import pokerBase.Action;
 import pokerBase.Card;
 import pokerBase.Deck;
@@ -69,28 +73,37 @@ public class PokerHub extends Hub {
 			case StartGame:
 				System.out.println("Starting Game!");
 				//TODO - Lab #5 Do all the things you need to do to start a game!!
-				
 				//	Determine which game is selected (from RootTableController)
-				//		1 line of code
+				RootLayoutController pokerGame = new RootLayoutController();
+				pokerGame.BuildMenus();
 				
 				//	Get the Rule based on the game selected
-				//		1 line of code
+				String ruleName = pokerGame.getRuleName();
 
 				//	The table should eventually allow multiple instances of 'GamePlay'...
 				//		Each game played is an instance of 'GamePlay'...
 				//		For the first instance of GamePlay, pick a random player to be the 
 				//		'Dealer'...  
 				//		< 5 lines of code to pick random player
+				HashMap PlayerHashMap = HubGamePlay.getGamePlayers();
+				Random generator = new Random();
+				Object[] values = PlayerHashMap.values().toArray();
+				UUID Dealer = (UUID) values[generator.nextInt(values.length)];
+				// Dealer is the value Dealer (can't think of how to make this value the dealer)
+				
 				
 				//	Start a new instance of GamePlay, based on rule set and Dealer (Player.PlayerID)
-				//		1 line of code
+				Rule GameRule = HubGamePlay.getRule();
+				GamePlay gamePlay = new GamePlay(GameRule, Dealer);
 				
 				//	There are 1+ players seated at the table... add these players to the game
-				//		< 5 lines of code
+				for (UUID players : HubGamePlay.getGamePlayers().keySet()) {
+				    HubGamePlay.addPlayerToGame(HubGamePlay.getGamePlayer(players));
+				}
 				
 				//	GamePlay has a deck...  create the deck based on the game's rules (the rule
 				//		will have number of jokers... wild cards...
-				//		1 line of code
+				Deck GameDeck = HubGamePlay.getGameDeck();
 
 				//	Determine the order of players and add each player in turn to GamePlay.lnkPlayerOrder
 				//	Example... four players playing...  seated in Position 1, 2, 3, 4
