@@ -100,10 +100,48 @@ public class RootLayoutController implements Initializable {
 		//	Pot Limit (this is NOT the default)
 		//	Group them together with a Toggle Group
 		//	Write a method to return which is selected.. .check out getRuleName()
-
+		Menu bettingRules = new Menu();
+		bettingRules.setText("Betting Rules");
+		mb.getMenus().add(1,bettingRules);
+		
+		ToggleGroup tglGrpBettingRules = new ToggleGroup();
+		
+		RadioMenuItem rmi1 = new RadioMenuItem("No Pot Limit");
+		RadioMenuItem rmi2 = new RadioMenuItem("Pot Limit");
+		rmi1.setToggleGroup(tglGrpBettingRules);
+		rmi2.setToggleGroup(tglGrpBettingRules);
+		
+		rmi1.setSelected(true);
+		
+		bettingRules.getItems().add(rmi1);
+		bettingRules.getItems().add(rmi2);
+		
 	}
     
-	
+	public String getBettingRule()
+	{	
+		String bettingRuleName = null;
+		for (Menu m: mb.getMenus())
+		{
+			if (m.getText() == "Betting Rules")
+			{
+				for (MenuItem mi: m.getItems())
+				{
+					if (mi.getClass().equals(RadioMenuItem.class))
+					{
+						RadioMenuItem rmi = (RadioMenuItem)mi;
+						if (rmi.isSelected() == true)
+						{
+							bettingRuleName= rmi.getText();
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		return bettingRuleName;
+	}	
 	
 	
 	
